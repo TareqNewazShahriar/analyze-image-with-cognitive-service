@@ -2,24 +2,18 @@
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
-
-// See https://aka.ms/new-console-template for more information
-
 namespace ComputerVisionQuickStart
 {
 	public class Program
 	{
-		private const string subscriptionKey = "";
-		private const string endpoint = "";
-
 		private const string ANALYZE_URL_IMAGE = "https://cdn-dev.bluebnc.com/images/boat/1555/9e3ecd3d-d3d3-4eb7-9af6-cee33157410e-large.jpg";
 
 		public static void Main()
 		{
-			JsonNode? resourceValues = ReadJson();
+			JsonNode? resourceValues = ReadAppSettings();
 
-			string key = resourceValues?["subscription-key1"]?.ToString() ?? "";
 			string endpoint = resourceValues?["azure-resource-endpoint-url"]?.ToString() ?? "";
+			string key = resourceValues?["subscription-key1"]?.ToString() ?? "";
 
 			// Create a client
 			ComputerVisionClient client = Authenticate(endpoint, key);
@@ -127,9 +121,9 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine();
 		}
 
-		public static JsonNode? ReadJson()
+		public static JsonNode? ReadAppSettings()
 		{
-			string jsonString = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\secrets.json");
+			string jsonString = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\appSettings.json");
 
 			JsonNode? values = JsonNode.Parse(jsonString);
 
