@@ -1,14 +1,17 @@
 ﻿using System.Text.Json.Nodes;
+using System.Drawing;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using System.Net;
+using System.Drawing.Imaging;
 
 namespace ComputerVisionQuickStart
 {
 	public class Program
 	{
-		private const string ANALYZE_URL_IMAGE = "https://cdn-dev.bluebnc.com/images/boat/1555/9e3ecd3d-d3d3-4eb7-9af6-cee33157410e-large.jpg";
+		private const string ANALYZE_URL_IMAGE = "https://cdn.bluebnc.com/images/boat/1554/4cf464c4-7b8b-4742-9d77-8c2b7b2262f3-large.jpg";
 
-		public static void Main()
+		public static async Task Main()
 		{
 			JsonNode? resourceValues = ReadAppSettings();
 
@@ -19,7 +22,9 @@ namespace ComputerVisionQuickStart
 			ComputerVisionClient client = Authenticate(endpoint, key);
 
 			// Analyze an image to get features and other properties.
-			AnalyzeImageUrl(client, ANALYZE_URL_IMAGE).Wait();
+			var AnalyzedResult = await AnalyzeImageUrl(client, ANALYZE_URL_IMAGE);
+
+			DrawOnImage(ANALYZE_URL_IMAGE, AnalyzedResult);
 		}
 
 		/*
@@ -39,7 +44,7 @@ namespace ComputerVisionQuickStart
 		* Analyze URL image. Extracts captions, categories, tags, objects, faces, racy/adult/gory content,
 		* brands, celebrities, landmarks, color scheme, and image types.
 		*/
-		public static async Task AnalyzeImageUrl(ComputerVisionClient client, string imageUrl)
+		public static async Task<ImageAnalysis> AnalyzeImageUrl(ComputerVisionClient client, string imageUrl)
 		{
 			Console.WriteLine("----------------------------------------------------------");
 			Console.WriteLine("ANALYZE IMAGE - URL");
@@ -119,6 +124,51 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine("Clip Art Type: " + results.ImageType.ClipArtType);
 			Console.WriteLine("Line Drawing Type: " + results.ImageType.LineDrawingType);
 			Console.WriteLine();
+
+			return results;
+		}
+
+		public static void DrawOnImage(string imageUrl, ImageAnalysis analyzedResult)
+		{
+			Image image = SaveImage(imageUrl, @"results\unprocessed-image.jpg", ImageFormat.Jpeg);
+
+			using(Font arialFont =  new Font("Arial", 30, FontStyle.Bold))
+			using (Graphics g = Graphics.FromImage(image))
+			{
+				var fillColor = Color.FromArgb(50, Color.Black);
+				var shadowBrush = new System.Drawing.SolidBrush(fillColor);
+				foreach (var obj in analyzedResult.Objects)
+				{
+					PointF objectLocation = new PointF(obj.Rectangle.X, obj.Rectangle.Y);
+					var rect = new RectangleF(objectLocation, new SizeF(obj.Rectangle.W, obj.Rectangle.H));
+					g.DrawRectangle(new Pen(Color.FromArgb(200, Color.Black), 2), rect.X, rect.Y, rect.Width, rect.Height);
+					g.FillRectangles( shadowBrush, new RectangleF[]{ rect });
+					
+					g.DrawString($"{obj.ObjectProperty} (confidence: {obj.Confidence})", arialFont, Brushes.WhiteSmoke, objectLocation);
+				}	
+
+				g.DrawString($"{analyzedResult.Description.Captions.First().Text} (confidence: {analyzedResult.Description.Captions.First().Confidence})", arialFont, Brushes.WhiteSmoke, new PointF(10, 10));
+			}
+
+			image.Save(@$"results\{analyzedResult.Description.Captions.First().Text}.jpg", ImageFormat.Jpeg);
+		}
+
+		public static Image SaveImage(string imageUrl, string filename, ImageFormat format)
+		{    
+			WebClient client = new WebClient();
+			Stream stream = client.OpenRead(imageUrl);
+			Bitmap bitmap;  bitmap = new Bitmap(stream);
+
+			if (bitmap != null)
+			{
+				bitmap.Save(filename, format);
+			}
+				
+			stream.Flush();
+			stream.Close();
+			client.Dispose();
+
+			return Image.FromFile(filename);
 		}
 
 		public static JsonNode? ReadAppSettings()
