@@ -5,7 +5,7 @@ Gathering image objects and other details using Microsoft Cognitive Service.
 ## An Analyzed Image
 <img height="300" src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/results/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
 
-## Detail Image Analysis Data
+## Detail Analysis Data
 ```
 Summary:
 a room with a table chairs and a large window with confidence 0.367992639541626
