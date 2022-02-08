@@ -73,7 +73,7 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine("Summary:");
 			foreach (var caption in results.Description.Captions)
 			{
-				Console.WriteLine($"{caption.Text} with confidence {caption.Confidence}");
+				Console.WriteLine($"\"{caption.Text}\" with confidence {caption.Confidence}");
 			}
 			Console.WriteLine();
 
@@ -81,7 +81,7 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine("Categories:");
 			foreach (var category in results.Categories)
 			{
-				Console.WriteLine($"{category.Name} with confidence {category.Score}");
+				Console.WriteLine($"\"{category.Name}\" (confidence: {category.Score})");
 			}
 			Console.WriteLine();
 
@@ -89,7 +89,7 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine("Tags:");
 			foreach (var tag in results.Tags)
 			{
-				Console.WriteLine($"{tag.Name} {tag.Confidence}");
+				Console.WriteLine($"\"{tag.Name}\" (confidence: {tag.Confidence})");
 			}
 			Console.WriteLine();
 
@@ -97,7 +97,7 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine("Objects:");
 			foreach (var obj in results.Objects)
 			{
-				Console.WriteLine($"{obj.ObjectProperty} with confidence {obj.Confidence} at location {obj.Rectangle.X}, " +
+				Console.WriteLine($"\"{obj.ObjectProperty}\" with confidence {obj.Confidence} at location {obj.Rectangle.X}, " +
 					$"{obj.Rectangle.X + obj.Rectangle.W}, {obj.Rectangle.Y}, {obj.Rectangle.Y + obj.Rectangle.H}");
 			}
 			Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(results.Objects));
@@ -105,9 +105,9 @@ namespace ComputerVisionQuickStart
 
 			// Adult or racy content, if any.
 			Console.WriteLine("Adult:");
-			Console.WriteLine($"Has adult content: {results.Adult.IsAdultContent} with confidence {results.Adult.AdultScore}");
-			Console.WriteLine($"Has racy content: {results.Adult.IsRacyContent} with confidence {results.Adult.RacyScore}");
-			Console.WriteLine($"Has gory content: {results.Adult.IsGoryContent} with confidence {results.Adult.GoreScore}");
+			Console.WriteLine($"Has adult content: \"{results.Adult.IsAdultContent}\" with confidence {results.Adult.AdultScore}");
+			Console.WriteLine($"Has racy content: \"{results.Adult.IsRacyContent}\" with confidence {results.Adult.RacyScore}");
+			Console.WriteLine($"Has gory content: \"{results.Adult.IsGoryContent}\" with confidence {results.Adult.GoreScore}");
 			Console.WriteLine();
 
 			// Identifies the color scheme.
