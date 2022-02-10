@@ -9,6 +9,7 @@ namespace ComputerVisionQuickStart
 {
 	public class Program
 	{
+		private const string OUTPUT_DIRECTORY = "output";
 		private const string ANALYZE_URL_IMAGE = "https://cdn.bluebnc.com/images/boat/1554/4cf464c4-7b8b-4742-9d77-8c2b7b2262f3-large.jpg";
 
 		public static async Task Main()
@@ -130,7 +131,7 @@ namespace ComputerVisionQuickStart
 
 		public static void DrawOnImage(string imageUrl, ImageAnalysis analyzedResult)
 		{
-			Image image = SaveImage(imageUrl, @"results\unprocessed-image.jpg", ImageFormat.Jpeg);
+			Image image = SaveImage(imageUrl, @$"{OUTPUT_DIRECTORY}\unprocessed-image.jpg", ImageFormat.Jpeg);
 
 			using(Font arialFont =  new Font("Arial", 30, FontStyle.Bold))
 			using (Graphics g = Graphics.FromImage(image))
@@ -150,7 +151,7 @@ namespace ComputerVisionQuickStart
 				g.DrawString($"{analyzedResult.Description.Captions.First().Text} (confidence: {analyzedResult.Description.Captions.First().Confidence})", arialFont, Brushes.WhiteSmoke, new PointF(10, 10));
 			}
 
-			image.Save(@$"results\{analyzedResult.Description.Captions.First().Text}.jpg", ImageFormat.Jpeg);
+			image.Save(@$"{OUTPUT_DIRECTORY}\{analyzedResult.Description.Captions.First().Text}.jpg", ImageFormat.Jpeg);
 		}
 
 		public static Image SaveImage(string imageUrl, string filename, ImageFormat format)
