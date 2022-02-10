@@ -3,7 +3,7 @@
 Gathering detected objects and other analysis details of an image using Microsoft Cognitive Service.
 
 ## An Analyzed Image with Detected Objects
-<img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/results/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
+<img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/output/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
 
 ## Detail Analysis Data
 ```
