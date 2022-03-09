@@ -10,7 +10,7 @@ namespace ComputerVisionQuickStart
 	public class Program
 	{
 		private const string OUTPUT_DIRECTORY = "output";
-		private const string ANALYZE_URL_IMAGE = "https://cdn.bluebnc.com/images/boat/1554/4cf464c4-7b8b-4742-9d77-8c2b7b2262f3-large.jpg";
+		private const string ANALYZE_URL_IMAGE = "https://cdn-dev.bluebnc.com/images/boat/95/a815f978cbe042f4acce09caca3c8951-large.jpg";
 
 		public static async Task Main()
 		{
@@ -23,9 +23,11 @@ namespace ComputerVisionQuickStart
 			ComputerVisionClient client = Authenticate(endpoint, key);
 
 			// Analyze an image to get features and other properties.
-			var AnalyzedResult = await AnalyzeImageUrl(client, ANALYZE_URL_IMAGE);
+			var analyzedResult = await GetCognitiveServiceData(client, ANALYZE_URL_IMAGE);
 
-			DrawOnImage(ANALYZE_URL_IMAGE, AnalyzedResult);
+			var image = DrawOnImage(ANALYZE_URL_IMAGE, analyzedResult);
+
+			AnalyzeServiceData(analyzedResult, image);
 		}
 
 		/*
@@ -45,7 +47,7 @@ namespace ComputerVisionQuickStart
 		* Analyze URL image. Extracts captions, categories, tags, objects, faces, racy/adult/gory content,
 		* brands, celebrities, landmarks, color scheme, and image types.
 		*/
-		public static async Task<ImageAnalysis> AnalyzeImageUrl(ComputerVisionClient client, string imageUrl)
+		public static async Task<ImageAnalysis> GetCognitiveServiceData(ComputerVisionClient client, string imageUrl)
 		{
 			Console.WriteLine("----------------------------------------------------------");
 			Console.WriteLine("ANALYZE IMAGE - URL");
@@ -68,11 +70,11 @@ namespace ComputerVisionQuickStart
 			Console.WriteLine($"Analyzing the image {Path.GetFileName(imageUrl)}...");
 			Console.WriteLine();
 			// Analyze the URL image 
-			ImageAnalysis results = await client.AnalyzeImageAsync(imageUrl, visualFeatures: features);
+			ImageAnalysis imageAnalysis = await client.AnalyzeImageAsync(imageUrl, visualFeatures: features);
 			
 			// Sunmarizes the image content.
 			Console.WriteLine("Summary:");
-			foreach (var caption in results.Description.Captions)
+			foreach (var caption in imageAnalysis.Description.Captions)
 			{
 				Console.WriteLine($"\"{caption.Text}\" with confidence {caption.Confidence}");
 			}
@@ -80,7 +82,7 @@ namespace ComputerVisionQuickStart
 
 			// Display categories the image is divided into.
 			Console.WriteLine("Categories:");
-			foreach (var category in results.Categories)
+			foreach (var category in imageAnalysis.Categories)
 			{
 				Console.WriteLine($"\"{category.Name}\" (confidence: {category.Score})");
 			}
@@ -88,7 +90,7 @@ namespace ComputerVisionQuickStart
 
 			// Image tags and their confidence score
 			Console.WriteLine("Tags:");
-			foreach (var tag in results.Tags)
+			foreach (var tag in imageAnalysis.Tags)
 			{
 				Console.WriteLine($"\"{tag.Name}\" (confidence: {tag.Confidence})");
 			}
@@ -96,40 +98,40 @@ namespace ComputerVisionQuickStart
 
 			// Objects
 			Console.WriteLine("Objects:");
-			foreach (var obj in results.Objects)
+			foreach (var obj in imageAnalysis.Objects)
 			{
 				Console.WriteLine($"\"{obj.ObjectProperty}\" with confidence {obj.Confidence} at location {obj.Rectangle.X}, " +
 					$"{obj.Rectangle.X + obj.Rectangle.W}, {obj.Rectangle.Y}, {obj.Rectangle.Y + obj.Rectangle.H}");
 			}
-			Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(results.Objects));
+			Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(imageAnalysis.Objects));
 			Console.WriteLine();
 
 			// Adult or racy content, if any.
 			Console.WriteLine("Adult:");
-			Console.WriteLine($"Has adult content: \"{results.Adult.IsAdultContent}\" with confidence {results.Adult.AdultScore}");
-			Console.WriteLine($"Has racy content: \"{results.Adult.IsRacyContent}\" with confidence {results.Adult.RacyScore}");
-			Console.WriteLine($"Has gory content: \"{results.Adult.IsGoryContent}\" with confidence {results.Adult.GoreScore}");
+			Console.WriteLine($"Has adult content: \"{imageAnalysis.Adult.IsAdultContent}\" with confidence {imageAnalysis.Adult.AdultScore}");
+			Console.WriteLine($"Has racy content: \"{imageAnalysis.Adult.IsRacyContent}\" with confidence {imageAnalysis.Adult.RacyScore}");
+			Console.WriteLine($"Has gory content: \"{imageAnalysis.Adult.IsGoryContent}\" with confidence {imageAnalysis.Adult.GoreScore}");
 			Console.WriteLine();
 
 			// Identifies the color scheme.
 			Console.WriteLine("Color Scheme:");
-			Console.WriteLine("Is black and white?: " + results.Color.IsBWImg);
-			Console.WriteLine("Accent color: " + results.Color.AccentColor);
-			Console.WriteLine("Dominant background color: " + results.Color.DominantColorBackground);
-			Console.WriteLine("Dominant foreground color: " + results.Color.DominantColorForeground);
-			Console.WriteLine("Dominant colors: " + string.Join(",", results.Color.DominantColors));
+			Console.WriteLine("Is black and white?: " + imageAnalysis.Color.IsBWImg);
+			Console.WriteLine("Accent color: " + imageAnalysis.Color.AccentColor);
+			Console.WriteLine("Dominant background color: " + imageAnalysis.Color.DominantColorBackground);
+			Console.WriteLine("Dominant foreground color: " + imageAnalysis.Color.DominantColorForeground);
+			Console.WriteLine("Dominant colors: " + string.Join(",", imageAnalysis.Color.DominantColors));
 			Console.WriteLine();
 
 			// Detects the image types.
 			Console.WriteLine("Image Type:");
-			Console.WriteLine("Clip Art Type: " + results.ImageType.ClipArtType);
-			Console.WriteLine("Line Drawing Type: " + results.ImageType.LineDrawingType);
+			Console.WriteLine("Clip Art Type: " + imageAnalysis.ImageType.ClipArtType);
+			Console.WriteLine("Line Drawing Type: " + imageAnalysis.ImageType.LineDrawingType);
 			Console.WriteLine();
 
-			return results;
+			return imageAnalysis;
 		}
 
-		public static void DrawOnImage(string imageUrl, ImageAnalysis analyzedResult)
+		public static Image DrawOnImage(string imageUrl, ImageAnalysis analyzedResult)
 		{
 			Image image = SaveImage(imageUrl, @$"{OUTPUT_DIRECTORY}\unprocessed-image.jpg", ImageFormat.Jpeg);
 
@@ -152,6 +154,8 @@ namespace ComputerVisionQuickStart
 			}
 
 			image.Save(@$"{OUTPUT_DIRECTORY}\{analyzedResult.Description.Captions.First().Text}.jpg", ImageFormat.Jpeg);
+
+			return image;
 		}
 
 		public static Image SaveImage(string imageUrl, string filename, ImageFormat format)
@@ -170,6 +174,28 @@ namespace ComputerVisionQuickStart
 			client.Dispose();
 
 			return Image.FromFile(filename);
+		}
+
+		public static void AnalyzeServiceData(ImageAnalysis imageAnalysis, Image image)
+		{
+			var biggestObject = imageAnalysis.Objects.MaxBy(x => x.Rectangle.W * x.Rectangle.H);
+			int percentage = (int)((biggestObject.Rectangle.W*biggestObject.Rectangle.H*100)/(image.Height*image.Width));
+			bool isBiggestObjectABoat = false;
+			var obj = new ObjectHierarchy(biggestObject.ObjectProperty, biggestObject.Confidence, biggestObject.Parent);
+			while(obj is object)
+			{
+				if(obj.ObjectProperty.ToLower().Contains("boat") || obj.ObjectProperty.ToLower().Contains("watercraft"))
+				{
+					isBiggestObjectABoat = true;
+					break;
+				}
+				else
+				{
+					obj = obj.Parent;
+				}
+			}
+			Console.WriteLine($"Biggest object: {biggestObject.ObjectProperty} which takes {percentage}% of the image.");
+			Console.WriteLine($"Is this image just to show a boat? {isBiggestObjectABoat && percentage > 30}");
 		}
 
 		public static JsonNode? ReadAppSettings()
