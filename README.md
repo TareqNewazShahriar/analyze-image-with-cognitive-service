@@ -1,9 +1,9 @@
 # image-recognition
 
-Gathering detected objects and other analysis details of an image using Microsoft Cognitive Service.
+Requests detail analysis data from Microsoft Cognitive Service and modifies the image with that data. (Analyzed data will be used to crop the desired or required portion of an image without human supervision)
 
-## An Analyzed Image with Detected Objects
-<img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/results/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
+## Modifed image using analysis data
+<img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/output/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
 
 ## Detail Analysis Data
 ```
