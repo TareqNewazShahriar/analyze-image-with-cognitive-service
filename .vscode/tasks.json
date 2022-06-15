@@ -7,7 +7,7 @@
 			"type": "process",
 			"args": [
 				"build",
-				"${workspaceFolder}/computer-vision-quickstart.csproj",
+				"${workspaceFolder}/image_procssing_for_auto_cropping_yacht_images.csproj",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
@@ -19,7 +19,7 @@
 			"type": "process",
 			"args": [
 				"publish",
-				"${workspaceFolder}/computer-vision-quickstart.csproj",
+				"${workspaceFolder}/image_procssing_for_auto_cropping_yacht_images.csproj",
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
@@ -33,7 +33,7 @@
 				"watch",
 				"run",
 				"--project",
-				"${workspaceFolder}/computer-vision-quickstart.csproj"
+				"${workspaceFolder}/image_procssing_for_auto_cropping_yacht_images.csproj"
 			],
 			"problemMatcher": "$msCompile"
 		}
