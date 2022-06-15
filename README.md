@@ -1,4 +1,4 @@
-# image-recognition
+#  image-procssing-to-auto-crop-yacht-images
 
 Requests detail analysis data from Microsoft Cognitive Service and modifies the image with that data. (Analyzed data will be used to crop the desired or required portion of an image without human supervision)
 
