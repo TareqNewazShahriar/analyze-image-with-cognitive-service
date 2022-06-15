@@ -36,7 +36,7 @@ public class Program
 
 	public static JsonNode? ReadAppSettings()
 	{
-		string jsonString = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\appSettings.json");
+		string jsonString = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"\secrets.json");
 
 		JsonNode? values = JsonNode.Parse(jsonString);
 
