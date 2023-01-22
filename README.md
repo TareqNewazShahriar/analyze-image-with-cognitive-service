@@ -2,6 +2,17 @@
 
 Requests detail analysis data from Microsoft Cognitive Service and modifies the image with that data. (Analyzed data will be used to crop the desired portion of an image without human supervision)
 
+
+## Strategy to auto-crop an yacht image in 4:3 ratio:
+1. Gather analyzed data of the image.
+2. If the image doesn't have any yacht, crop it 4:3 from center.
+3. If the image contains one or more yachts and is there any yacht which occupies more that 60% of the image?
+  3.1. If so, then crop the image from the center of that yacht.
+  3.2. If not, then follow step 2.
+
+* Take hundreds of sample images containing single yacht, multiple yachts, inside yacht to see the outcome of the algorithm.
+
+
 ## Modifed image using analysis data
 <img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/output/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
 
