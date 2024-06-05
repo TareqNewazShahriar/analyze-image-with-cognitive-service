@@ -13,7 +13,7 @@ Requests detail analysis data from Microsoft Cognitive Service and modifies the 
 * Take hundreds of sample images containing single yacht, multiple yachts, inside yacht to see the outcome of the algorithm.
 
 
-## Image analysis data
+## Image analysis data (image modified with analysed data)
 <img src="https://raw.githubusercontent.com/TareqNewazShahriar/image-recognition/main/output/a%20room%20with%20a%20table%20chairs%20and%20a%20large%20window.jpg" />
 
 ## Detail Analysis Data
