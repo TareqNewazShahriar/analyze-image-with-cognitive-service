@@ -6,9 +6,9 @@ Requests detail analysis data from Microsoft Cognitive Service and modifies the 
 ## Strategy to crop the right portion an yacht image
 1. Gather analyzed data of the image.
 2. If the image doesn't have any yacht, crop it 4:3 from center.
-3. If the image contains one or more yachts and is there any yacht which occupies more that 60% of the image?
-  3.1. If so, then crop the image from the center of that yacht.
-  3.2. If not, then follow step 2.
+3. If the image contains one or more yachts and is there any yacht which occupies more that 60% of the image?  
+  3.1. If so, then crop the image from the center of that yacht.  
+  3.2. If not, then follow step 2.  
 
 * Take hundreds of sample images containing single yacht, multiple yachts, inside yacht to see the outcome of the algorithm.
 
